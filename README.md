@@ -18,7 +18,8 @@ Setting List Adapter :
 
 Example List Adapter :
 ----------------------
-
+<pre>
+<code>
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 public class TopicListAdapter extends ImageListAdapter {
 
@@ -99,3 +99,5 @@ public class TopicListAdapter extends ImageListAdapter {
         TextView startTime;
     }
 }
+</code>
+</pre>
