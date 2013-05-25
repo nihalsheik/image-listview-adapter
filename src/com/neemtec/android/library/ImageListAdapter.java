@@ -19,7 +19,7 @@ import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public abstract class ImageListAdapter extends BaseAdapter {
+public abstract class ImageListAdapter<E> extends BaseAdapter {
 
     public enum CacheMethod {
         MEMORY, DISK
@@ -27,7 +27,7 @@ public abstract class ImageListAdapter extends BaseAdapter {
 
     private final static String TAG = "ImageListAdapter";
 
-    protected List<Object> listItems;
+    protected List<E> listItems;
 
     private Handler handler = null;
     private ExecutorService executorService = null;
@@ -40,7 +40,7 @@ public abstract class ImageListAdapter extends BaseAdapter {
 
     //----------------------------------------------------------------------------//
 
-    public ImageListAdapter(Context context, List<Object> listItems) {
+    public ImageListAdapter(Context context, List<E> listItems) {
         this.listItems = listItems;
         handler = new Handler();
         executorService = Executors.newFixedThreadPool(5);
@@ -59,7 +59,7 @@ public abstract class ImageListAdapter extends BaseAdapter {
     //----------------------------------------------------------------------------//
 
     @Override
-    public Object getItem(int position) {
+    public E getItem(int position) {
         return listItems.get(position);
     }
 
@@ -106,7 +106,8 @@ public abstract class ImageListAdapter extends BaseAdapter {
 
     public void setCacheMethod(CacheMethod cacheMethod) {
         this.cacheMethod = cacheMethod;
-        cache = (cacheMethod.equals(CacheMethod.MEMORY)) ? new MemoryCache() : new FileCache(cacheDir);
+        cache = (cacheMethod.equals(CacheMethod.MEMORY)) ? new MemoryCache() : new FileCache(
+                cacheDir);
     }
 
     //----------------------------------------------------------------------------//
@@ -118,10 +119,12 @@ public abstract class ImageListAdapter extends BaseAdapter {
     //----------------------------------------------------------------------------//
 
     public Bitmap getBitmap(String url, int position) {
-        if (notFoundItems.contains(position)) {
-            Log.i(TAG, "Not Found");
+        if (url == null || url.equals("") || url.equalsIgnoreCase("null")
+                || notFoundItems.contains(position)) {
+            Log.i(TAG, "Not Found / URL null");
             return null;
         }
+        Log.d(TAG, "------------>" + String.valueOf(position) + url);
         Bitmap b = null;
         try {
             b = cache.get(url);
@@ -131,7 +134,7 @@ public abstract class ImageListAdapter extends BaseAdapter {
                 return b;
             }
 
-            Log.i(TAG, "getBitmap ************* : " + String.valueOf(position));
+            // Log.i(TAG, "getBitmap ************* : " + String.valueOf(position));
 
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();

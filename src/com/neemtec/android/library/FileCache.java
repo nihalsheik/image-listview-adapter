@@ -1,3 +1,12 @@
+/**
+ *  <ul><li>Copyright (c) 2012 Neemtec Solutions</li></ul>
+ * 
+ *  @author Sheik Mohideen 
+ *  
+ *  @version 1.0
+ *   
+ */
+
 package com.neemtec.android.library;
 
 import java.io.File;
